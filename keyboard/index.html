@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<head>
+    <style>
+        h1 {
+            height: 1000px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            font-size: 512px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="ch"></h1>
+    <script>
+        const audios = [];
+        const load = function (index, path, filename, ext) {
+            audios[index] = new Audio(path + '/' + filename + '.' + ext);
+        }
+        const l = function (index, key) {
+            load(index, 'audios', key, 'wav');
+        }
+        l(37, 'LEFT');
+        l(38, 'UP');
+        l(39, 'RIGHT');
+        l(40, 'DOWN');
+        for (let i = 0; i <= 9; i++) {
+            l(i.toString().charCodeAt(0), i.toString());
+        }
+        for (let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); i++) {
+            l(i, String.fromCharCode(i));
+        }
+
+        const print = function (event) {
+            if (event.keyCode === 37) {
+                console.log('LEFT' + ':' + event.keyCode);
+                document.getElementById('ch').innerText = 'LEFT';
+            } else if (event.keyCode === 38) {
+                console.log('UP' + ':' + event.keyCode);
+                document.getElementById('ch').innerText = 'UP';
+            } else if (event.keyCode === 39) {
+                console.log('RIGHT' + ':' + event.keyCode);
+                document.getElementById('ch').innerText = 'RIGHT';
+            } else if (event.keyCode === 40) {
+                console.log('DOWN' + ':' + event.keyCode);
+                document.getElementById('ch').innerText = 'DOWN';
+            } else {
+                console.log(String.fromCharCode(event.keyCode) + ':' + event.keyCode);
+                document.getElementById('ch').innerText = String.fromCharCode(event.keyCode);
+            }
+        }
+        window.addEventListener("keydown", (event) => {
+            if (audios[event.keyCode] != undefined) {
+                audios[event.keyCode].play();
+                print(event);
+            }
+        });        
+    </script>
+</body>
