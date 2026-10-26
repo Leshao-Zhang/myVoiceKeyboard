@@ -12,6 +12,23 @@ Windows：把 `dist/VoiceKeyboard-1.0.0-win-x64.zip` 拷过去解压，运行里
 
 按键仍会输入到当前软件。密码框处于系统安全输入时不会出声。
 
+## 换成自己的声音
+
+一个键对应一个 wav，文件名必须保持原样，扩展名也是 `.wav`。字母和数字用大写，方向键是 `LEFT.wav`、`RIGHT.wav`、`UP.wav`、`DOWN.wav`。一共 40 个：`A`–`Z`、`0`–`9`，再加上这四个方向键。内容可以是你自己念的「A」「左」或其他短句。用「语音备忘录」或系统录音机录好后，导出或另存为 wav。如果手里是 m4a、mp3，先转成 wav 再替换。
+
+已经装好的应用，先从菜单栏或系统托盘里退出，再换文件，然后重新打开。只关窗口不够，程序还在，用的仍是刚才读进内存的声音。
+
+- Mac：在访达里右键「语音键盘」→「显示包内容」→ `Contents/Resources/audios/`，用同名 wav 覆盖。
+- Windows：在 `VoiceKeyboard.exe` 旁边的 `resources/audios/` 里覆盖。
+
+从源码改：替换 `keyboard/audios/` 里的同名文件。网页演示会直接用新文件。桌面应用要重新打包后才会带上新声音：
+
+```bash
+cd app
+npm run build:mac
+npm run build:win
+```
+
 ## 开发
 
 ```bash
