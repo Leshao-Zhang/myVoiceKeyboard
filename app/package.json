@@ -1,0 +1,72 @@
+{
+  "name": "voice-keyboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "按键读音。Mac 与 Windows 上关掉窗口也能在后台读。",
+  "author": "Leshao-Zhang",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "self-test": "VOICE_SELF_TEST=1 electron .",
+    "build:mac": "electron-builder --mac --arm64 --x64",
+    "build:win": "electron-builder --win --x64"
+  },
+  "dependencies": {
+    "uiohook-napi": "^1.5.4"
+  },
+  "devDependencies": {
+    "electron": "35.7.5",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.leshao.voicekeyboard",
+    "productName": "语音键盘",
+    "executableName": "VoiceKeyboard",
+    "artifactName": "VoiceKeyboard-${version}-${os}-${arch}.${ext}",
+    "npmRebuild": false,
+    "directories": {
+      "output": "../dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "renderer.js",
+      "styles.css",
+      "build/trayTemplate.png",
+      "build/trayColor.png"
+    ],
+    "asarUnpack": [
+      "build/trayTemplate.png",
+      "build/trayColor.png",
+      "**/node_modules/uiohook-napi/**"
+    ],
+    "extraResources": [
+      {
+        "from": "../keyboard/audios",
+        "to": "audios",
+        "filter": [
+          "*.wav"
+        ]
+      }
+    ],
+    "mac": {
+      "identity": null,
+      "category": "public.app-category.utilities",
+      "icon": "build/icon.png",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "extendInfo": {
+        "NSAccessibilityUsageDescription": "用于在其他软件里听按键并播放读音。按键不会被记录或上传。"
+      }
+    },
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        "zip"
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; media-src blob:; style-src 'self'; script-src 'self'">
+  <title>语音键盘</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <p id="glyph" class="idle">正在准备读音</p>
+  </main>
+  <footer>
+    <p class="status"><span id="dot"></span><span id="status">正在准备</span></p>
+    <p class="actions">
+      <button id="toggle" type="button">暂停</button>
+      <button id="access" type="button" hidden>辅助功能</button>
+      <button id="input" type="button" hidden>输入监控</button>
+    </p>
+  </footer>
+  <script src="renderer.js"></script>
+</body>
+</html>
