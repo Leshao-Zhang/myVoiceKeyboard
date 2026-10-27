@@ -1,66 +1,100 @@
 <!DOCTYPE html>
-
+<html lang="zh-CN">
 <head>
-    <title>语音键盘</title>
-    <style>
-        h1 {
-            height: 1000px;
-            margin: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            font-size: 512px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>语音键盘</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background: #f6f4ef;
+      color: #1c1915;
+      font-family: "Avenir Next", "PingFang SC", "Segoe UI", sans-serif;
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 32px 24px;
+    }
+
+    #glyph {
+      margin: 0;
+      font-weight: 600;
+      font-size: clamp(120px, 30vw, 300px);
+      line-height: 0.86;
+      letter-spacing: -0.05em;
+      user-select: none;
+    }
+
+    #glyph.idle {
+      max-width: 12em;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: 0;
+      text-align: center;
+    }
+
+    footer {
+      padding: 16px 24px 22px;
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #5c564c;
+    }
+  </style>
 </head>
-
 <body>
-    <h1 id="ch"></h1>
-    <script>
-        const audios = [];
-        const load = function (index, path, filename, ext) {
-            audios[index] = new Audio(path + '/' + filename + '.' + ext);
-        }
-        const l = function (index, key) {
-            load(index, 'audios', key, 'wav');
-        }
-        l(37, 'LEFT');
-        l(38, 'UP');
-        l(39, 'RIGHT');
-        l(40, 'DOWN');
-        for (let i = 0; i <= 9; i++) {
-            l(i.toString().charCodeAt(0), i.toString());
-        }
-        for (let i = 'A'.charCodeAt(0); i <= 'Z'.charCodeAt(0); i++) {
-            l(i, String.fromCharCode(i));
-        }
+  <main>
+    <p id="glyph" class="idle">按 A–Z、0–9 或方向键</p>
+  </main>
+  <footer>只有这个页面在前台时才会读。不录音，也不调音量。日常使用请打开桌面应用。</footer>
+  <script>
+    const keys = {
+      KeyA: ['A', 'A'], KeyB: ['B', 'B'], KeyC: ['C', 'C'], KeyD: ['D', 'D'],
+      KeyE: ['E', 'E'], KeyF: ['F', 'F'], KeyG: ['G', 'G'], KeyH: ['H', 'H'],
+      KeyI: ['I', 'I'], KeyJ: ['J', 'J'], KeyK: ['K', 'K'], KeyL: ['L', 'L'],
+      KeyM: ['M', 'M'], KeyN: ['N', 'N'], KeyO: ['O', 'O'], KeyP: ['P', 'P'],
+      KeyQ: ['Q', 'Q'], KeyR: ['R', 'R'], KeyS: ['S', 'S'], KeyT: ['T', 'T'],
+      KeyU: ['U', 'U'], KeyV: ['V', 'V'], KeyW: ['W', 'W'], KeyX: ['X', 'X'],
+      KeyY: ['Y', 'Y'], KeyZ: ['Z', 'Z'],
+      Digit0: ['0', '0'], Digit1: ['1', '1'], Digit2: ['2', '2'], Digit3: ['3', '3'],
+      Digit4: ['4', '4'], Digit5: ['5', '5'], Digit6: ['6', '6'], Digit7: ['7', '7'],
+      Digit8: ['8', '8'], Digit9: ['9', '9'],
+      ArrowLeft: ['LEFT', '←'], ArrowUp: ['UP', '↑'],
+      ArrowRight: ['RIGHT', '→'], ArrowDown: ['DOWN', '↓']
+    }
+    const clips = new Map()
+    const glyph = document.getElementById('glyph')
 
-        const print = function (event) {
-            if (event.keyCode === 37) {
-                console.log('LEFT' + ':' + event.keyCode);
-                document.getElementById('ch').innerText = 'LEFT';
-            } else if (event.keyCode === 38) {
-                console.log('UP' + ':' + event.keyCode);
-                document.getElementById('ch').innerText = 'UP';
-            } else if (event.keyCode === 39) {
-                console.log('RIGHT' + ':' + event.keyCode);
-                document.getElementById('ch').innerText = 'RIGHT';
-            } else if (event.keyCode === 40) {
-                console.log('DOWN' + ':' + event.keyCode);
-                document.getElementById('ch').innerText = 'DOWN';
-            } else {
-                console.log(String.fromCharCode(event.keyCode) + ':' + event.keyCode);
-                document.getElementById('ch').innerText = String.fromCharCode(event.keyCode);
-            }
-        }
-        window.addEventListener("keydown", (event) => {
-            if (audios[event.keyCode] != undefined) {
-                audios[event.keyCode].play();
-                print(event);
-            }
-        });        
-    </script>
+    function clip(file) {
+      let audio = clips.get(file)
+      if (!audio) {
+        audio = new Audio('audios/' + file + '.wav')
+        clips.set(file, audio)
+      }
+      return audio
+    }
+
+    window.addEventListener('keydown', (event) => {
+      if (event.repeat || event.ctrlKey || event.altKey || event.metaKey) return
+      const spec = keys[event.code]
+      if (!spec) return
+      const audio = clip(spec[0])
+      audio.pause()
+      audio.currentTime = 0
+      audio.play()
+      glyph.textContent = spec[1]
+      glyph.classList.remove('idle')
+    })
+  </script>
 </body>
+</html>
