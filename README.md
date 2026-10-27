@@ -52,7 +52,7 @@ npm run build:mac
 npm run build:win
 ```
 
-产物在 `dist/`。
+产物在 `dist/`。推送到 GitHub 的 main 后，Actions 里的「编译安装包」会编出同样的 Mac 和 Windows 包，在该次运行记录里下载。不从本机把安装包传上去。
 
 ## 前台网页
 
